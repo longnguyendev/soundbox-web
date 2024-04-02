@@ -4,7 +4,8 @@ import Link from './Link';
 
 import { Box, type BoxProps, Typography } from '@mui/material';
 
-import { type Song } from '@/model';
+import { type Song } from '@/lib/model';
+import { BASE_URL } from '@/lib/utils';
 
 interface CardProps extends BoxProps {
   song: Song;
@@ -16,7 +17,7 @@ const SongCard: FC<CardProps> = ({ song, onClick, ...props }) => {
       <Box
         sx={{
           aspectRatio: '1',
-          backgroundImage: `url(http://localhost:8000/storage/thumbnails/${song.thumbnail})`,
+          backgroundImage: `url(${BASE_URL}${song.thumbnail})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center center',
           backgroundRepeat: 'no-repeat',

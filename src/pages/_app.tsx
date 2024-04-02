@@ -3,8 +3,14 @@ import { type EmotionCache } from '@emotion/react';
 import createEmotionCache from '@/createEmotionCache';
 import PageProvider from '@/components/helpers/PageProvider';
 import { type NextPage } from 'next';
-import { type ReactElement, type ReactNode } from 'react';
+import { useState, type ReactElement, type ReactNode } from 'react';
 import { AudioProvider } from '@/hooks/useAudio';
+import {
+  HydrationBoundary,
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query';
+
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
@@ -26,9 +32,17 @@ export type AppPropsWithLayout = MyAppProps & {
 export default function MyApp(props: AppPropsWithLayout) {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
   const getLayout = Component.getLayout ?? ((page) => page);
+  const [queryClient] = useState(() => new QueryClient());
+
   return (
-    <PageProvider emotionCache={emotionCache}>
-      <AudioProvider>{getLayout(<Component {...pageProps} />)}</AudioProvider>
-    </PageProvider>
+    <QueryClientProvider client={queryClient}>
+      <HydrationBoundary state={pageProps.dehydratedState}>
+        <PageProvider emotionCache={emotionCache}>
+          <AudioProvider>
+            {getLayout(<Component {...pageProps} />)}
+          </AudioProvider>
+        </PageProvider>
+      </HydrationBoundary>
+    </QueryClientProvider>
   );
 }

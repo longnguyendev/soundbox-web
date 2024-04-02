@@ -12,7 +12,8 @@ import { FavoriteBorder } from '@mui/icons-material';
 import Link from './Link';
 import { useAudio } from '@/hooks/useAudio';
 import { useHorizontalScroll } from '@/hooks';
-import { type Song } from '@/model';
+import { type Song } from '@/lib/model';
+import { BASE_URL } from '@/lib/utils';
 
 interface AlbumItemProps extends BoxProps {
   song: Song;
@@ -44,7 +45,7 @@ const AlbumItem: FC<AlbumItemProps> = ({ song, ...props }) => {
             sx={{
               width: '42px',
               aspectRatio: '1',
-              backgroundImage: `url(http://localhost:8000/storage/thumbnails/${song.thumbnail})`,
+              backgroundImage: `url(${BASE_URL}${song.thumbnail})`,
               backgroundSize: 'cover',
               backgroundPosition: 'center center',
               backgroundRepeat: 'no-repeat',
@@ -54,7 +55,7 @@ const AlbumItem: FC<AlbumItemProps> = ({ song, ...props }) => {
             mr="12px"
             borderRadius={'10px'}
             onClick={() => {
-              setUrl(`http://localhost:8000/storage/filePath/${song.slug}`);
+              setUrl(`${BASE_URL}${song.slug}`);
             }}
           />
           <IconButton

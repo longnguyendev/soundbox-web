@@ -1,3 +1,4 @@
+import { BASE_URL } from '@/lib/utils';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import router from 'next/router';
@@ -8,7 +9,7 @@ export default function Sigout() {
     try {
       void axios
         .post(
-          'http://localhost:8000/api/auth/logout',
+          `${BASE_URL}api/auth/logout`,
           {},
           {
             headers: {

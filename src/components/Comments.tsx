@@ -1,4 +1,5 @@
-import { type Comment } from '@/model';
+import { type Comment } from '@/lib/model';
+import { BASE_URL } from '@/lib/utils';
 import { Box, Typography } from '@mui/material';
 import { type FC } from 'react';
 
@@ -22,7 +23,7 @@ const Comments: FC<CommentsProps> = ({ comments }) => {
             sx={{
               width: '50px',
               aspectRatio: '1',
-              backgroundImage: `url(http://localhost:8000/storage/avatars/${comment.user.avatar})`,
+              backgroundImage: `url(${BASE_URL}${comment.user.avatar})`,
               backgroundSize: 'cover',
               backgroundPosition: 'center center',
               backgroundRepeat: 'no-repeat',

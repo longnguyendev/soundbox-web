@@ -5,7 +5,8 @@ import { Box, Container, Typography, Stack } from '@mui/material';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import { AlbumItem } from '@/components';
-import { type Song, type Album } from '@/model';
+import { type Song, type Album } from '@/lib/model';
+import { BASE_URL } from '@/lib/utils';
 
 const getAlbum = async ({
   slug,
@@ -14,9 +15,7 @@ const getAlbum = async ({
   slug: string;
   setAlbum: (data: Album) => void;
 }) => {
-  const { data } = await axios.get<Album>(
-    `http://localhost:8000/api/albums/${slug}`
-  );
+  const { data } = await axios.get<Album>(`${BASE_URL}api/albums/${slug}`);
   setAlbum(data);
 };
 
@@ -41,7 +40,7 @@ const AlbumsDetailPage: NextPageWithLayout = () => {
     <Box
       minHeight="100vh"
       sx={{
-        background: `linear-gradient(180deg, rgba(29, 33, 35, 0.8) 0%, #1D2123 61.48%), url(http://localhost:8000/storage/thumbnails/${album.thumbnail})`,
+        background: `linear-gradient(180deg, rgba(29, 33, 35, 0.8) 0%, #1D2123 61.48%), url(${BASE_URL}${album.thumbnail})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center center',
         backgroundRepeat: 'no-repeat',
@@ -56,7 +55,7 @@ const AlbumsDetailPage: NextPageWithLayout = () => {
           <Box
             sx={{
               aspectRatio: '1',
-              backgroundImage: `url(http://localhost:8000/storage/thumbnails/${album.thumbnail})`,
+              backgroundImage: `url(${BASE_URL}${album.thumbnail})`,
               backgroundSize: 'cover',
               backgroundPosition: 'center center',
               backgroundRepeat: 'no-repeat',

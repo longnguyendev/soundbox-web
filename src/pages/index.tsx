@@ -3,33 +3,29 @@ import { Grid, Stack } from '@mui/material';
 import { type NextPageWithLayout } from './_app';
 import { Layout } from '@/layouts';
 
-import axios from 'axios';
-import { useEffect, useState } from 'react';
-
 // import Cookies from 'js-cookie';
 
-import { type Album, type Category } from '@/model';
 import { Collection, HomeSlider, AlbumsCard } from '@/components';
+import { BASE_URL, getAlbums, getCategories } from '@/lib/utils';
+import { type Album, type Category } from '@/lib/model';
+import { type GetStaticPropsContext } from 'next';
+import { QueryClient, dehydrate, useQuery } from '@tanstack/react-query';
 
-const getAlbums = async (setAlbums: (data: Album[]) => void) => {
-  const { data } = await axios.get<Album[]>('http://localhost:8000/api/albums');
-  setAlbums(data);
-};
+interface HomePageProps {
+  albums: Album[];
+  categories: Category[];
+}
 
-const getCategories = async (setCategories: (data: Category[]) => void) => {
-  const { data } = await axios.get<Category[]>(
-    'http://localhost:8000/api/categories'
-  );
-  setCategories(data);
-};
+const Home: NextPageWithLayout<HomePageProps> = () => {
+  const { data: categories } = useQuery({
+    queryKey: ['getCategories'],
+    queryFn: getCategories,
+  });
 
-const Home: NextPageWithLayout = () => {
-  const [categories, setCategories] = useState<Category[]>();
-  const [albums, setAlbums] = useState<Album[]>([]);
-  useEffect(() => {
-    void getAlbums(setAlbums);
-    void getCategories(setCategories);
-  }, []);
+  const { data: albums } = useQuery({
+    queryKey: ['getAlbums'],
+    queryFn: getAlbums,
+  });
   return (
     <>
       <Grid container spacing={2} mb="34px" columns={{ xs: 1, sm: 2, md: 3 }}>
@@ -50,7 +46,7 @@ const Home: NextPageWithLayout = () => {
             {albums?.map((album) => (
               <AlbumsCard
                 key={album.id}
-                thumbnail={`http://localhost:8000/storage/thumbnails/${album.thumbnail}`}
+                thumbnail={`${BASE_URL}${album.thumbnail}`}
                 name={album.name}
                 description={album.description}
                 slug={album.slug}
@@ -73,3 +69,23 @@ const Home: NextPageWithLayout = () => {
 Home.getLayout = (page) => <Layout>{page}</Layout>;
 
 export default Home;
+
+export async function getStaticProps(context: GetStaticPropsContext) {
+  const queryClient = new QueryClient();
+
+  await queryClient.prefetchQuery({
+    queryKey: ['getCategories'],
+    queryFn: () => getCategories(),
+  });
+  await queryClient.prefetchQuery({
+    queryKey: ['getAlbums'],
+    queryFn: () => getAlbums(),
+  });
+  // const categories = await getCategories().then(({ data }) => data);
+  // const albums = await getAlbums().then(({ data }) => data);
+  return {
+    props: {
+      dehydratedState: dehydrate(queryClient),
+    },
+  };
+}

@@ -5,6 +5,7 @@ import React, { type FC, type PropsWithChildren } from 'react';
 
 export const Layout: FC<PropsWithChildren> = ({ children }) => {
   const { url } = useAudio();
+
   return (
     <Box minHeight="100vh">
       <PrimarySearchAppBar />

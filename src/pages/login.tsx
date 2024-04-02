@@ -15,6 +15,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import router from 'next/router';
+import { BASE_URL } from '@/lib/utils';
 
 function Copyright(props: any) {
   return (
@@ -39,7 +40,7 @@ const defaultTheme = createTheme();
 
 export default function SignInSide() {
   const handleLogin = async (user: any) => {
-    const { data } = await axios.post('http://localhost:8000/api/auth/login', {
+    const { data } = await axios.post(`${BASE_URL}api/auth/login`, {
       email: user.email,
       password: user.password,
     });

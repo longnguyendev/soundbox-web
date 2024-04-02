@@ -14,7 +14,8 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import router from 'next/router';
 import { Paper } from '@mui/material';
-import { type User } from '@/model';
+import { type User } from '@/lib/model';
+import { BASE_URL } from '@/lib/utils';
 
 interface NewUser extends Omit<User, 'id'> {
   password: string;
@@ -44,7 +45,7 @@ const defaultTheme = createTheme();
 export default function SignUp() {
   const createUer = async (newUser: NewUser) => {
     const { data } = await axios.post(
-      'http://localhost:8000/api/users',
+      `${BASE_URL}api/users`,
       {
         name: newUser.name,
         email: newUser.email,

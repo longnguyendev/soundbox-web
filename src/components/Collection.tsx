@@ -2,8 +2,9 @@ import { Box, Stack, Typography } from '@mui/material';
 import React, { type FC } from 'react';
 import { useHorizontalScroll } from '@/hooks';
 import { useAudio } from '@/hooks/useAudio';
-import { type Song } from '@/model';
+import { type Song } from '@/lib/model';
 import { SongCard } from '@/components';
+import { BASE_URL } from '@/lib/utils';
 
 interface CollectionProps {
   name: string;
@@ -35,9 +36,7 @@ const Collection: FC<CollectionProps> = ({ name, items }) => {
               width="150px"
               flexShrink="0"
               onClick={() => {
-                setUrl(
-                  `http://localhost:8000/storage/filePath/${item.file_path}`
-                );
+                setUrl(`${BASE_URL}${item.file_path}`);
               }}
             />
           ))}

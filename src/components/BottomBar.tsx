@@ -13,12 +13,13 @@ import {
 
 import axios from 'axios';
 
-import { type Song } from '@/model';
+import { type Song } from '@/lib/model';
 import { useAudio } from '@/hooks/useAudio';
+import { BASE_URL } from '@/lib/utils';
 
 export const BottomBar = () => {
   const getSong = async (setSong: (data: Song) => void) => {
-    const { data } = await axios.get<Song>('http://localhost:8000/api/next');
+    const { data } = await axios.get<Song>(`${BASE_URL}api/next`);
     setSong(data);
   };
   const [active, setActive] = useState(false);
@@ -64,7 +65,7 @@ export const BottomBar = () => {
 
   useEffect(() => {
     if (song !== undefined) {
-      setUrl(`http://localhost:8000/storage/filePath/${song.file_path}`);
+      setUrl(`${BASE_URL}${song.file_path}`);
     }
   }, [setUrl, song]);
 

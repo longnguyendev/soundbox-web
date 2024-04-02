@@ -10,13 +10,14 @@ import Link from 'next/link';
 import Cookies from 'js-cookie';
 import axios from 'axios';
 import router from 'next/router';
-import { type User } from '@/model';
+import { type User } from '@/lib/model';
+import { BASE_URL } from '@/lib/utils';
 
 const getUser = async (
   setUser: React.Dispatch<React.SetStateAction<User | undefined>>
 ) => {
   const ACCESS_TOKEN = Cookies.get('access_token') as string;
-  const { data } = await axios.get<User>('http://localhost:8000/api/user', {
+  const { data } = await axios.get<User>(`${BASE_URL}api/user`, {
     headers: {
       'Content-Type': 'application/json',
       Accept: 'application/json',
@@ -37,7 +38,7 @@ export const SideBar = () => {
     const ACCESS_TOKEN = Cookies.get('access_token');
     axios
       .post(
-        'http://localhost:8000/api/auth/logout',
+        `${BASE_URL}api/auth/logout`,
         {},
         {
           headers: {
@@ -95,7 +96,7 @@ export const SideBar = () => {
         {user ? (
           <Avatar
             alt="Remy Sharp"
-            src={`http://localhost:8000/storage/avatars/${user.avatar}`}
+            src={`${BASE_URL}${user.avatar}`}
             sx={{ width: 30, height: 30 }}
           />
         ) : (
