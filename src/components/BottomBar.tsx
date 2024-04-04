@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { useEffect, useRef, useState } from 'react';
 
-import { Box, Container, IconButton, Slider } from '@mui/material';
+import { Box, Container, IconButton, Slider, Typography } from '@mui/material';
 import {
   SkipNext,
   PlayArrow,
@@ -46,6 +46,7 @@ export const BottomBar = () => {
   };
 
   const handleTogglePlay = () => {
+    console.log('isPlaying 1', isPlaying);
     if (audioElement.current) {
       if (isPlaying) {
         audioElement.current.pause();
@@ -54,6 +55,7 @@ export const BottomBar = () => {
       }
       setIsPlaying(!isPlaying);
     }
+    console.log('isPlaying 2', isPlaying);
   };
 
   useEffect(() => {
@@ -68,6 +70,20 @@ export const BottomBar = () => {
       setUrl(`${BASE_URL}${song.file_path}`);
     }
   }, [setUrl, song]);
+
+  useEffect(() => {
+    if (currentTime === audioElement.current?.duration) {
+      if (active) {
+        if (audioElement.current) {
+          void audioElement.current.play();
+          setIsPlaying(true);
+        }
+      } else {
+        void getSong(setSong);
+        void audioElement.current.play();
+      }
+    }
+  }, [active, currentTime]);
 
   return (
     <Box
@@ -135,10 +151,27 @@ export const BottomBar = () => {
             </IconButton>
           </Box>
         </Box>
+        <Box display="flex" justifyContent="space-between">
+          <Typography>
+            {audioElement.current
+              ? `${Math.floor(currentTime / 60)}:${Math.floor(
+                  currentTime % 60
+                )}`
+              : 0}
+          </Typography>
+          <Typography>
+            {audioElement.current
+              ? `${Math.floor(
+                  (audioElement.current.duration - currentTime) / 60
+                )}:${Math.floor(
+                  (audioElement.current.duration - currentTime) % 60
+                )}`
+              : 0}
+          </Typography>
+        </Box>
         <Slider
           aria-label="Default"
           value={currentTime}
-          valueLabelDisplay="auto"
           onChange={(_, value) => {
             handleSeek(value as number);
           }}

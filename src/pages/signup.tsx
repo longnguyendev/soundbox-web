@@ -10,16 +10,12 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import axios from 'axios';
 import Cookies from 'js-cookie';
 import router from 'next/router';
 import { Paper } from '@mui/material';
-import { type User } from '@/lib/model';
-import { BASE_URL } from '@/lib/utils';
-
-interface NewUser extends Omit<User, 'id'> {
-  password: string;
-}
+import { type NewUser } from '@/lib/model';
+import { signup } from '@/lib/utils';
+import { toast } from 'react-toastify';
 
 function Copyright(props: any) {
   return (
@@ -44,24 +40,19 @@ const defaultTheme = createTheme();
 
 export default function SignUp() {
   const createUer = async (newUser: NewUser) => {
-    const { data } = await axios.post(
-      `${BASE_URL}api/users`,
-      {
-        name: newUser.name,
-        email: newUser.email,
-        password: newUser.password,
-        avatar: newUser.avatar,
-        gender: 'male',
-      },
-      {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          Accept: 'application/json',
-        },
-      }
-    );
-    if (data.access_token) {
+    const data = await signup(newUser);
+    if (data?.access_token) {
       Cookies.set('access_token', data.access_token);
+      toast.success('🦄 Đăng ký thành công!', {
+        position: 'bottom-left',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'colored',
+      });
       void router.push('/');
     }
   };

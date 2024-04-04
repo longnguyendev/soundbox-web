@@ -5,53 +5,10 @@ import { Box, Button, Container, TextField, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import { Comments } from '@/components';
 import { type GetStaticPropsContext } from 'next';
-import { BASE_URL, addComment, getSongDetail, getSongs } from '@/lib/utils';
+import { BASE_URL, addComment, getSong, getSongs } from '@/lib/utils';
 import Cookies from 'js-cookie';
-import { QueryClient, dehydrate, useQuery } from '@tanstack/react-query';
-
-// const getSong = async ({
-//   slug,
-//   setSong,
-// }: {
-//   slug: string;
-//   setSong: (data: Song) => void;
-// }) => {
-//   const { data } = await axios.get<Song>(
-//     `http://localhost:8000/api/songs/${slug}`
-//   );
-//   setSong(data);
-//   console.log(data);
-// };
-
-// const addComment = async ({
-//   content,
-//   songId,
-//   onSuccess,
-// }: {
-//   content: string;
-//   songId: number;
-//   onSuccess: () => void;
-// }) => {
-//   const ACCESS_TOKEN = Cookies.get('access_token');
-//   if (ACCESS_TOKEN) {
-//     axios
-//       .post(
-//         'http://localhost:8000/api/comments',
-//         { content, songId },
-//         {
-//           headers: {
-//             'Content-Type': 'application/json',
-//             Accept: 'application/json',
-//             Authorization: `Bearer ${ACCESS_TOKEN}`,
-//           },
-//         }
-//       )
-//       .then(() => {
-//         onSuccess();
-//       })
-//       .catch((_err) => {});
-//   }
-// };
+import { QueryClient, dehydrate } from '@tanstack/react-query';
+import { useSongQuery } from '@/hooks';
 
 const SongDetailPage: NextPageWithLayout = () => {
   const router = useRouter();
@@ -59,12 +16,8 @@ const SongDetailPage: NextPageWithLayout = () => {
     query: { slug },
   } = router;
 
-  const { data: song, refetch } = useQuery({
-    queryKey: ['getSongDetail'],
-    queryFn: () => getSongDetail(slug as string),
-  });
+  const { data: song, refetch } = useSongQuery(String(slug));
 
-  console.log('data', song);
   const [content, setContent] = useState('');
 
   useEffect(() => {
@@ -126,6 +79,7 @@ const SongDetailPage: NextPageWithLayout = () => {
       </Typography>
       <TextField
         fullWidth
+        label="Add your comment"
         variant="filled"
         value={content}
         onChange={(e) => {
@@ -134,6 +88,7 @@ const SongDetailPage: NextPageWithLayout = () => {
       />
       <Button
         variant="contained"
+        sx={{ mt: 3 }}
         onClick={() => {
           void (Cookies.get('access_token')
             ? addComment(content, song.id).then((_res) => {
@@ -155,7 +110,7 @@ SongDetailPage.getLayout = (page) => <Layout>{page}</Layout>;
 export default SongDetailPage;
 
 export async function getStaticPaths() {
-  const { data } = await getSongs();
+  const data = await getSongs();
 
   const paths = data.map((song) => {
     return { params: { slug: song.slug } };
@@ -168,10 +123,10 @@ export async function getStaticPaths() {
 
 export async function getStaticProps(context: GetStaticPropsContext) {
   const queryClient = new QueryClient();
-
+  const slug = context.params?.slug ?? '';
   await queryClient.prefetchQuery({
-    queryKey: ['getSongDetail'],
-    queryFn: () => getSongDetail(context.params?.slug as string),
+    queryKey: ['getSong', slug],
+    queryFn: () => getSong(String(slug)),
   });
 
   return {

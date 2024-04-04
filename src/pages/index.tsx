@@ -9,7 +9,8 @@ import { Collection, HomeSlider, AlbumsCard } from '@/components';
 import { BASE_URL, getAlbums, getCategories } from '@/lib/utils';
 import { type Album, type Category } from '@/lib/model';
 import { type GetStaticPropsContext } from 'next';
-import { QueryClient, dehydrate, useQuery } from '@tanstack/react-query';
+import { QueryClient, dehydrate } from '@tanstack/react-query';
+import { useAlbumsQuery, useCategoriesQuery } from '@/hooks';
 
 interface HomePageProps {
   albums: Album[];
@@ -17,25 +18,19 @@ interface HomePageProps {
 }
 
 const Home: NextPageWithLayout<HomePageProps> = () => {
-  const { data: categories } = useQuery({
-    queryKey: ['getCategories'],
-    queryFn: getCategories,
-  });
+  const { data: categories } = useCategoriesQuery();
+  const { data: albums } = useAlbumsQuery();
 
-  const { data: albums } = useQuery({
-    queryKey: ['getAlbums'],
-    queryFn: getAlbums,
-  });
   return (
     <>
-      <Grid container spacing={2} mb="34px" columns={{ xs: 1, sm: 2, md: 3 }}>
+      <Grid container spacing={2} mb="34px" columns={{ xs: 1, sm: 1, md: 3 }}>
         <Grid item xs={1} sm={1} md={2}>
           <HomeSlider />
         </Grid>
         <Grid item xs={1} sm={1} md={1}>
           <Stack
             spacing="12px"
-            height={'400px'}
+            height={'430px'}
             overflow={'auto'}
             sx={{
               '::-webkit-scrollbar': {

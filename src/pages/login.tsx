@@ -12,10 +12,11 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import axios from 'axios';
 import Cookies from 'js-cookie';
 import router from 'next/router';
-import { BASE_URL } from '@/lib/utils';
+import { login } from '@/lib/utils';
+import { type LoginInput } from '@/lib/model';
+import { toast } from 'react-toastify';
 
 function Copyright(props: any) {
   return (
@@ -39,13 +40,20 @@ function Copyright(props: any) {
 const defaultTheme = createTheme();
 
 export default function SignInSide() {
-  const handleLogin = async (user: any) => {
-    const { data } = await axios.post(`${BASE_URL}api/auth/login`, {
-      email: user.email,
-      password: user.password,
-    });
-    if (data.access_token) {
+  const handleLogin = async (user: LoginInput) => {
+    const data = await login(user);
+    if (data?.access_token) {
       Cookies.set('access_token', data.access_token);
+      toast.success('🦄 Đăng nhập thành công!', {
+        position: 'bottom-left',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'colored',
+      });
       void router.push('/');
     }
   };
@@ -58,7 +66,7 @@ export default function SignInSide() {
       password: data.get('password'),
     });
     const user = { email: data.get('email'), password: data.get('password') };
-    void handleLogin(user);
+    void handleLogin(user as LoginInput);
   };
   if (Cookies.get('access_token')) {
     void router.push('/');

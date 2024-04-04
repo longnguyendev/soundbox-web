@@ -49,3 +49,16 @@ export interface Album {
   totalsong: number;
   singers: Singer[];
 }
+
+export interface LoginInput {
+  email: string;
+  password: string;
+}
+
+export interface NewUser extends Omit<User, 'id'> {
+  password: string;
+}
+
+export interface AuthData {
+  access_token: string;
+}

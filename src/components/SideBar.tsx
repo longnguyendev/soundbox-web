@@ -5,56 +5,14 @@ import Radio from '@/assets/icons/Radio';
 import Video from '@/assets/icons/Video';
 import { Home } from '@mui/icons-material';
 import { Avatar, Box, IconButton, Stack } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
-import Cookies from 'js-cookie';
-import axios from 'axios';
 import router from 'next/router';
-import { type User } from '@/lib/model';
-import { BASE_URL } from '@/lib/utils';
-
-const getUser = async (
-  setUser: React.Dispatch<React.SetStateAction<User | undefined>>
-) => {
-  const ACCESS_TOKEN = Cookies.get('access_token') as string;
-  const { data } = await axios.get<User>(`${BASE_URL}api/user`, {
-    headers: {
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
-      Authorization: `Bearer ${ACCESS_TOKEN}`,
-    },
-  });
-  setUser(data);
-};
+import { BASE_URL, logout } from '@/lib/utils';
+import { useUserQuery } from '@/hooks';
 
 export const SideBar = () => {
-  const [user, setUser] = useState<User>();
-  useEffect(() => {
-    if (Cookies.get('access_token')) {
-      void getUser(setUser);
-    }
-  }, []);
-  const logout = async () => {
-    const ACCESS_TOKEN = Cookies.get('access_token');
-    axios
-      .post(
-        `${BASE_URL}api/auth/logout`,
-        {},
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Accept: 'application/json',
-            Authorization: `Bearer ${ACCESS_TOKEN as string}`,
-          },
-        }
-      )
-      .then(() => {
-        document.cookie =
-          'access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-        void router.push('/login');
-      })
-      .catch((_err) => {});
-  };
+  const { data: user } = useUserQuery();
 
   return (
     <Box
@@ -108,7 +66,11 @@ export const SideBar = () => {
         {user && (
           <IconButton
             onClick={() => {
-              void logout();
+              void logout().then((_res) => {
+                document.cookie =
+                  'access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+                void router.push('/login');
+              });
             }}
           >
             <Logout />

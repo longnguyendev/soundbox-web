@@ -11,8 +11,10 @@ import {
   QueryClientProvider,
 } from '@tanstack/react-query';
 
+import 'react-toastify/dist/ReactToastify.css';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import { ToastContainer } from 'react-toastify';
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -39,6 +41,7 @@ export default function MyApp(props: AppPropsWithLayout) {
       <HydrationBoundary state={pageProps.dehydratedState}>
         <PageProvider emotionCache={emotionCache}>
           <AudioProvider>
+            <ToastContainer />
             {getLayout(<Component {...pageProps} />)}
           </AudioProvider>
         </PageProvider>
