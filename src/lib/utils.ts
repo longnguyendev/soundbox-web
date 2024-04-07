@@ -11,7 +11,7 @@ import {
 } from './model';
 import { toast } from 'react-toastify';
 
-export const BASE_URL = 'http://157.245.149.148/:8000/';
+export const BASE_URL = 'http://157.245.149.148:8000/';
 
 // const ACCESS_TOKEN = Cookies.get('access_token') ?? '';
 
