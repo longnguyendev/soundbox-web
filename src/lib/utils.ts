@@ -13,14 +13,21 @@ import { toast } from 'react-toastify';
 
 export const BASE_URL = 'http://128.199.245.172:8000/';
 
+// const ACCESS_TOKEN = Cookies.get('access_token') ?? '';
+
 export const http = axios.create({
   baseURL: BASE_URL,
   timeout: 5000,
-  // headers: {
-  //   'Content-Type': 'application/json',
-  //   Accept: 'application/json',
-  //   Authorization: `Bearer ${ACCESS_TOKEN}`,
-  // },
+  headers: {
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+  },
+});
+
+http.interceptors.request.use((config) => {
+  config.headers.Authorization = `Bearer ${Cookies.get('access_token') ?? ''}`;
+
+  return config;
 });
 
 export const getCategories = async () => {
@@ -55,14 +62,13 @@ export const getSong = async (slug: string) => {
 };
 
 export const getUser = async () => {
-  const ACCESS_TOKEN = Cookies.get('access_token') ?? '';
   const result = await http
     .get<User>('api/user', {
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-        Authorization: `Bearer ${ACCESS_TOKEN}`,
-      },
+      // headers: {
+      //   'Content-Type': 'application/json',
+      //   Accept: 'application/json',
+      //   Authorization: `Bearer ${ACCESS_TOKEN}`,
+      // },
     })
     .then(({ data }) => data);
   return result;
@@ -81,19 +87,10 @@ export const searchSongs = async (keyword: string) => {
 
 export const login = async (loginInput: LoginInput) => {
   const result = await http
-    .post<AuthData>(
-      'api/auth/login',
-      {
-        email: loginInput.email,
-        password: loginInput.password,
-      },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
-      }
-    )
+    .post<AuthData>('api/auth/login', {
+      email: loginInput.email,
+      password: loginInput.password,
+    })
     .then(({ data }) => data)
     .catch((_err) => {
       toast.error('Đăng nhập không thành công', {
@@ -121,7 +118,6 @@ export const signup = async (loginInput: NewUser) => {
       {
         headers: {
           'Content-Type': 'multipart/form-data',
-          Accept: 'application/json',
         },
       }
     )
@@ -142,15 +138,8 @@ export const signup = async (loginInput: NewUser) => {
 };
 
 export const logout = async () => {
-  const ACCESS_TOKEN = Cookies.get('access_token') ?? '';
   await http
-    .post('api/auth/logout', {
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-        Authorization: `Bearer ${ACCESS_TOKEN}`,
-      },
-    })
+    .post('api/auth/logout')
     .then((_res) => {})
     .catch((_err) => {});
 };

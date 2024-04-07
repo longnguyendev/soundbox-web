@@ -1,0 +1,23 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Login to Private Docker Registry
+        run: echo "${{ secrets.DOCKERHUB_ACCESS_TOKEN }}" | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+
+      - name: Build Docker image
+        run: docker build -t longnguyendev214/strapi-teddy:latest .
+
+      - name: Push Docker image to Docker Hub
+        run: docker push longnguyendev214/strapi-teddy:latest
