@@ -2,9 +2,9 @@ name: Docker Image CI
 
 on:
   push:
-    branches: ["main"]
+    branches: ['main']
   pull_request:
-    branches: ["main"]
+    branches: ['main']
 
 jobs:
   build:
@@ -17,7 +17,7 @@ jobs:
         run: echo "${{ secrets.DOCKERHUB_ACCESS_TOKEN }}" | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
 
       - name: Build Docker image
-        run: docker build -t longnguyendev214/strapi-teddy:latest .
+        run: docker build -t longnguyendev214/soundbox-web:latest .
 
       - name: Push Docker image to Docker Hub
-        run: docker push longnguyendev214/strapi-teddy:latest
+        run: docker push longnguyendev214/soundbox-web:latest
