@@ -2,6 +2,7 @@ import { Box, IconButton, Typography } from '@mui/material';
 import React, { type FC } from 'react';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import Link from './Link';
+import { useTheme } from 'next-themes';
 
 interface TopCardProps {
   thumbnail: string;
@@ -16,12 +17,13 @@ const AlbumsCard: FC<TopCardProps> = ({
   description,
   slug,
 }) => {
+  const { resolvedTheme } = useTheme();
   return (
     <Box
       display="flex"
       alignItems="center"
       borderRadius="20px"
-      bgcolor="#1A1E1F"
+      bgcolor={resolvedTheme === 'dark' ? '#1A1E1F' : '#343a40'}
       p="16px"
       component={Link}
       href={`/album/${slug}`}

@@ -21,6 +21,7 @@ export const SideBar = () => {
       position="fixed"
       top="90px"
       left="25px"
+      zIndex={999}
     >
       <Stack
         bgcolor="#1A1E1F"
@@ -30,7 +31,7 @@ export const SideBar = () => {
         spacing="20px"
         mb="20px"
       >
-        <IconButton LinkComponent={Link} href="/">
+        <IconButton LinkComponent={Link} href="/" sx={{ color: 'white' }}>
           <Home />
         </IconButton>
         <IconButton>

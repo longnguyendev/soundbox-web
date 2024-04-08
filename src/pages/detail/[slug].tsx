@@ -37,11 +37,12 @@ const SongDetailPage: NextPageWithLayout = () => {
           backgroundSize: 'cover',
           backgroundPosition: 'center center',
           backgroundRepeat: 'no-repeat',
+          borderRadius: '24px',
         }}
       >
         <Container
           sx={{
-            pt: '20px',
+            py: '20px',
           }}
         >
           <Box display="flex" alignItems="center">

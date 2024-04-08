@@ -14,7 +14,7 @@ export const roboto = Roboto({
 
 export const lightTheme = createTheme({
   palette: {
-    primary: { main: '#9147FF' },
+    primary: { main: 'rgba(255, 255, 255, 0.5)' },
     secondary: { main: '#2a48f3' },
     mode: 'light',
   },
@@ -31,7 +31,7 @@ export const darkTheme = createTheme({
 export const globalStyles = css`
   :root {
     body {
-      background-color: #fff;
+      background-color: #6c757d;
       color: #121212;
     }
   }
