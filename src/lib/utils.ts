@@ -107,13 +107,16 @@ export const login = async (loginInput: LoginInput) => {
   return result;
 };
 
-export const signup = async (loginInput: NewUser) => {
+export const signup = async (signupInput: NewUser) => {
   const result = await http
     .post<AuthData>(
       'api/users',
       {
-        email: loginInput.email,
-        password: loginInput.password,
+        email: signupInput.email,
+        password: signupInput.password,
+        name: signupInput.name,
+        avatar: signupInput.avatar,
+        gender: 'male',
       },
       {
         headers: {
