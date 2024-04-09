@@ -23,11 +23,11 @@ const AlbumsCard: FC<TopCardProps> = ({
       display="flex"
       alignItems="center"
       borderRadius="20px"
-      bgcolor={resolvedTheme === 'dark' ? '#1A1E1F' : '#343a40'}
+      bgcolor={resolvedTheme === 'light' ? 'rgba(29, 33, 35, 0.3)' : '#1A1E1F'}
       p="16px"
       component={Link}
       href={`/album/${slug}`}
-      sx={{ textDecoration: 'none' }}
+      sx={{ textDecoration: 'none', backdropFilter: 'blur(15px)' }}
     >
       <Box
         sx={{
@@ -44,10 +44,16 @@ const AlbumsCard: FC<TopCardProps> = ({
         flexShrink="0"
       />
       <Box>
-        <Typography fontSize="20px" mb="4px">
+        <Typography fontSize="20px" mb="4px" color="#fff">
           {name}
         </Typography>
-        <Typography fontSize="13px" mb="4px">
+        <Typography
+          fontSize="13px"
+          mb="4px"
+          sx={(theme) => ({
+            color: theme.palette.mode === 'dark' ? '#FACD66' : '#000',
+          })}
+        >
           {description.substring(0, 20)}...
         </Typography>
       </Box>

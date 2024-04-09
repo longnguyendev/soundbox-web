@@ -6,14 +6,12 @@ import { Box, type BoxProps, Typography } from '@mui/material';
 
 import { type Song } from '@/lib/model';
 import { BASE_URL } from '@/lib/utils';
-import { useTheme } from 'next-themes';
 
 interface CardProps extends BoxProps {
   song: Song;
 }
 
 const SongCard: FC<CardProps> = ({ song, onClick, ...props }) => {
-  const { resolvedTheme } = useTheme();
   return (
     <Box {...props}>
       <Box
@@ -35,12 +33,26 @@ const SongCard: FC<CardProps> = ({ song, onClick, ...props }) => {
         href={`/detail/${song.slug}`}
         sx={{ textDecoration: 'none' }}
       >
-        <Typography fontSize="15px" color="white" mb="5px">
+        <Typography
+          fontSize="15px"
+          color="white"
+          mb="5px"
+          height="40px"
+          sx={{
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            WebkitLineClamp: 2,
+            display: '-webkit-box',
+            WebkitBoxOrient: 'vertical',
+          }}
+        >
           {song.name}
         </Typography>
         <Typography
           fontSize="12px"
-          color={resolvedTheme === 'dark' ? 'rgba(255, 255, 255, 0.5)' : '#000'}
+          sx={(theme) => ({
+            color: theme.palette.mode === 'dark' ? '#FACD66' : '#000',
+          })}
         >
           {song.singers.map((singer: any) => singer.name).join(', ')}
         </Typography>
@@ -50,3 +62,21 @@ const SongCard: FC<CardProps> = ({ song, onClick, ...props }) => {
 };
 
 export { SongCard };
+
+// interface Theme {
+//   mode: string;
+// }
+
+// type Sx = string | ((theme: Theme) => string);
+
+// interface TestProps {
+//   sx: Sx;
+// }
+
+// export const Test = ({ sx }: TestProps) => {
+//   const theme: Theme = { mode: 'light' };
+
+//   const newSx = typeof sx === 'string' ? sx : sx(theme);
+
+//   return <div className={newSx}>hehe</div>;
+// };
