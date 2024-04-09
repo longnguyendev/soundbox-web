@@ -55,7 +55,7 @@ const AlbumItem: FC<AlbumItemProps> = ({ song, ...props }) => {
             mr="12px"
             borderRadius={'10px'}
             onClick={() => {
-              setUrl(`${BASE_URL}${song.slug}`);
+              setUrl(`${BASE_URL}${song.file_path}`);
             }}
           />
           <IconButton
