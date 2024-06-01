@@ -23,7 +23,12 @@ const AlbumItem: FC<AlbumItemProps> = ({ song, ...props }) => {
   const { setUrl } = useAudio();
   const ref = useHorizontalScroll();
   return (
-    <Box {...props}>
+    <Box
+      {...props}
+      onClick={() => {
+        setUrl(`${BASE_URL}${song.file_path}`);
+      }}
+    >
       <Stack
         ref={ref}
         display={'flex'}
@@ -54,9 +59,6 @@ const AlbumItem: FC<AlbumItemProps> = ({ song, ...props }) => {
             flexShrink="0"
             mr="12px"
             borderRadius={'10px'}
-            onClick={() => {
-              setUrl(`${BASE_URL}${song.file_path}`);
-            }}
           />
           <IconButton
             sx={{ ml: 'auto', border: '1px solid rgba(255, 255, 255, 0.11)' }}
