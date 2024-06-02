@@ -1,4 +1,5 @@
 import { Box } from '@mui/material';
+import Image from 'next/image';
 import React from 'react';
 
 import Slider, { type Settings } from 'react-slick';
@@ -46,24 +47,60 @@ export function HomeSlider() {
         },
       }}
     >
-      <div>
-        <img src="/banner1.jpeg" alt="" style={{ width: '100%' }} />
-      </div>
-      <div>
-        <img src="/banner2.jpeg" alt="" style={{ width: '100%' }} />
-      </div>
-      <div>
-        <img src="/banner3.jpeg" alt="" style={{ width: '100%' }} />
-      </div>
-      <div>
-        <img src="/banner4.jpeg" alt="" style={{ width: '100%' }} />
-      </div>
-      <div>
-        <img src="/banner5.jpeg" alt="" style={{ width: '100%' }} />
-      </div>
-      <div>
-        <img src="/banner6.jpeg" alt="" style={{ width: '100%' }} />
-      </div>
+      <Box sx={{ position: 'relative', width: '100%', aspectRatio: '2' }}>
+        <Image
+          src="/banner1.jpeg"
+          fill
+          sizes="100vw"
+          alt=""
+          style={{ objectFit: 'cover', height: '100%' }}
+        />
+      </Box>
+      <Box sx={{ position: 'relative', width: '100%', aspectRatio: '2' }}>
+        <Image
+          src="/banner2.jpeg"
+          fill
+          sizes="100vw"
+          alt=""
+          style={{ objectFit: 'cover', height: '100%' }}
+        />
+      </Box>
+      <Box sx={{ position: 'relative', width: '100%', aspectRatio: '2' }}>
+        <Image
+          src="/banner3.jpeg"
+          fill
+          sizes="100vw"
+          alt=""
+          style={{ objectFit: 'cover', height: '100%' }}
+        />
+      </Box>
+      <Box sx={{ position: 'relative', width: '100%', aspectRatio: '2' }}>
+        <Image
+          src="/banner4.jpeg"
+          fill
+          sizes="100vw"
+          alt=""
+          style={{ objectFit: 'cover', height: '100%' }}
+        />
+      </Box>
+      <Box sx={{ position: 'relative', width: '100%', aspectRatio: '2' }}>
+        <Image
+          src="/banner5.jpeg"
+          fill
+          sizes="100vw"
+          alt=""
+          style={{ objectFit: 'cover', height: '100%' }}
+        />
+      </Box>
+      <Box sx={{ position: 'relative', width: '100%', aspectRatio: '2' }}>
+        <Image
+          src="/banner6.jpeg"
+          fill
+          sizes="100vw"
+          alt=""
+          style={{ objectFit: 'cover', height: '100%' }}
+        />
+      </Box>
     </Box>
   );
 }
